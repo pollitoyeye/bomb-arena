@@ -72,12 +72,12 @@ function onClientDisconnect() {
 		Lobby.broadcastSlotStateUpdate(this.gameId, "empty");
 	} else if(lobbySlots[this.gameId].state == "inprogress") {
 		var game = games[this.gameId];
-	
+
 		if(this.id in game.players) {
 			console.log("deleting " + this.id);
 			delete game.players[this.id];
-	
-			io.in(this.gameId).emit("remove player", {id: this.id});	
+
+			io.in(this.gameId).emit("remove player", {id: this.id});
 		}
 
 		if(game.numPlayers < 2) {
@@ -115,7 +115,7 @@ function onStartGame() {
 	Lobby.broadcastSlotStateUpdate(this.gameId, "inprogress");
 
 	var ids = pendingGame.getPlayerIds();
-	
+
 	for(var i = 0; i < ids.length; i++) {
 		var playerId = ids[i];
 		var spawnPoint = MapInfo[pendingGame.mapName].spawnLocations[i];
@@ -177,7 +177,7 @@ function onPlaceBomb(data) {
 		var explosionData = bomb.detonate(game.map, player.bombStrength, game.players);
 		player.numBombsAlive--;
 
-		io.in(gameId).emit("detonate", {explosions: explosionData.explosions, id: bombId, 
+		io.in(gameId).emit("detonate", {explosions: explosionData.explosions, id: bombId,
 			destroyedTiles: explosionData.destroyedBlocks});
 		delete game.bombs[bombId];
 		game.map.removeBombFromGrid(data.x, data.y);
@@ -243,19 +243,22 @@ function endRound(gameId, tiedWinnerIds) {
 	}
 
 	game.currentRound++;
-
+	for(var i in game.players) {
+		var player = game.players[i];
+		player.numBombsAlive = 0;
+	}
 	if(game.currentRound > 2) {
 		var gameWinners = game.calculateGameWinners();
 
 		if(gameWinners.length == 1 && (game.currentRound > 3 || gameWinners[0].wins == 2)) {
-			io.in(gameId).emit("end game", {completedRoundNumber: game.currentRound - 1, roundWinnerColors: roundWinnerColors, 
+			io.in(gameId).emit("end game", {completedRoundNumber: game.currentRound - 1, roundWinnerColors: roundWinnerColors,
 				gameWinnerColor: gameWinners[0].color});
 			terminateExistingGame(gameId);
 			return;
 		}
 	}
 
-	game.awaitingAcknowledgements = true;
+	game.awaitingAcknowledgements = false;
 	game.resetForNewRound();
 
 

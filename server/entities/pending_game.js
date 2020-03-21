@@ -12,8 +12,8 @@ var PendingGame = function() {
 	this.players = {};
 	this.state = "empty";
 	this.mapName = "";
-	this.colors = [{colorName: "white", available: true}, {colorName: "black", available: true}, {colorName: "blue", available: true}, {colorName: "red", available: true}, 
-	{colorName: "purple", available: true}, {colorName: "green", available: true}];
+	this.colors = [{colorName: "white", available: true}, {colorName: "black", available: true}, {colorName: "blue", available: true}, {colorName: "red", available: true},
+	{colorName: "white", available: true}, {colorName: "green", available: true}];
 };
 
 PendingGame.prototype = {

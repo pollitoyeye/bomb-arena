@@ -9,7 +9,7 @@ var MapInfo = {
 		destructibleTileId: 361
 	},
 	levelTwo: {
-		spawnLocations: [{x: 2, y: 1}, {x: 13, y: 1}, {x: 2, y: 13}, {x: 13, y: 13}, {x: 7, y: 7}],
+		spawnLocations: [{x: 2, y: 1}, {x: 13, y: 1}, {x: 2, y: 13}, {x: 13, y: 13}, {x: 6, y: 7}],
 		collisionTiles: [169, 191],
 		groundLayer: "Ground",
 		blockLayer: "Blocks",
